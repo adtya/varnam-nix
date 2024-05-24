@@ -22,7 +22,10 @@ buildGoModule rec {
   buildPhase = ''
     runHook preInstall
 
-    go build -tags "fts5" -buildmode=c-shared -ldflags "-s -w -X 'github.com/varnamproject/govarnam/govarnam.BuildString=${version} (\#0000000 1970-01-01T00:00:00+0000)' -X 'github.com/varnamproject/govarnam/govarnam.VersionString=${version}' -extldflags "-Wl,-soname,${pname}.so.1,--version-script,${src}/govarnam.syms"" -o ${pname}.so .
+    go build -tags "fts5" -buildmode=c-shared -ldflags \
+    "-s -w -X 'github.com/varnamproject/govarnam/govarnam.BuildString=${version} (\#0000000 1970-01-01T00:00:00+0000)' \
+    -X 'github.com/varnamproject/govarnam/govarnam.VersionString=${version}' \
+    -extldflags "-Wl,-soname,${pname}.so.1,--version-script,${src}/govarnam.syms"" -o ${pname}.so .
 
     runHook postInstall
   '';

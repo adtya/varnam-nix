@@ -22,6 +22,7 @@ buildGoModule rec {
   CGO_ENABLED = 1;
 
   nativeBuildInputs = [ pkg-config libgovarnam ];
+  buildInputs = [ pkg-config libgovarnam ];
 
   ldflags = [
     "-w"
@@ -30,16 +31,19 @@ buildGoModule rec {
     "-X 'github.com/varnamproject/govarnam/govarnam.VersionString=${version}'"
   ];
 
-
   subPackages = [
     "cli"
   ];
+
+  postInstall = ''
+    mv $out/bin/cli $out/bin/varnamcli
+  '';
 
   meta = {
     description = "Easily type Indic languages on computer and mobile. GoVarnam is a cross-platform transliteration library. Manglish -> Malayalam, Thanglish -> Tamil, Hinglish -> Hindi plus another 10 languages. GoVarnam is a near-Go port of libvarnam";
     homepage = "https://github.com/varnamproject/govarnam";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ adtya ];
-
+    mainProgram = "varnamcli";
   };
 }
