@@ -1,21 +1,14 @@
 { lib
 , buildGoModule
-, fetchFromGitHub
 , pkg-config
 , libgovarnam
 }:
 
 buildGoModule rec {
   pname = "varnam-cli";
-  version = "1.9.1";
+  version = libgovarnam.version;
 
-  src = fetchFromGitHub {
-    owner = "varnamproject";
-    repo = "govarnam";
-    rev = "v${version}";
-    hash = "sha256-7SYdeOMgc8VBx0rsu6tWGND9mq0Td1VeGmZrpfsWsVE=";
-    fetchSubmodules = true;
-  };
+  src = libgovarnam.src;
 
   vendorHash = "sha256-a7m2THvdi17muJI6p6OVX9cBMcmocYwju29beG2H8CY=";
 

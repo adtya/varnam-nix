@@ -14,7 +14,7 @@
         };
 
         packages = rec {
-          libgovarnam = pkgs.callPackage ./govarnam/libgovarnam.nix { };
+          libgovarnam = pkgs.callPackage ./govarnam/libgovarnam.nix { selected_schemes = [ "ml" ]; };
           varnam-cli = pkgs.callPackage ./govarnam { inherit libgovarnam; };
           fcitx5-varnam = pkgs.callPackage ./varnam-fcitx5 { inherit libgovarnam; };
         };
