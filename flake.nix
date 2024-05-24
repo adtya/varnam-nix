@@ -26,6 +26,8 @@
           ];
         };
         packages = rec {
+          libgovarnam = pkgs.callPackage ./govarnam/default.nix { };
+          varnam-cli = pkgs.callPackage ./govarnam/default.nix { cli = true; };
         };
       }
     );
