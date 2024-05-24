@@ -23,7 +23,6 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config libgovarnam ];
 
-
   ldflags = [
     "-w"
     "-s"
