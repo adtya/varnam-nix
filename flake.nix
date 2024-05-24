@@ -29,7 +29,7 @@
             ninja
             cmake
             pkg-config
-          ]) ++ (with packages; [ libgovarnam ]);
+          ]) ++ (with packages; [ libgovarnam varnam-cli ]);
         };
         packages = {
           inherit (packages) libgovarnam varnam-cli fcitx5-varnam;
