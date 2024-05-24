@@ -28,6 +28,7 @@
         packages = rec {
           libgovarnam = pkgs.callPackage ./govarnam/default.nix { };
           varnam-cli = pkgs.callPackage ./govarnam/default.nix { cli = true; };
+          fcitx5-varnam = pkgs.callPackage ./varnam-fcitx5 { inherit libgovarnam; };
         };
       }
     );

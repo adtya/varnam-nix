@@ -1,0 +1,9 @@
+diff --git a/meson_options.txt b/meson_options.txt
+deleted file mode 100644
+index fce7f59..0000000
+--- a/meson_options.txt
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# For older meson versions( < 1.1)
+-option('varnam_debug', type: 'boolean', value: false)
+\ No newline at end of file
