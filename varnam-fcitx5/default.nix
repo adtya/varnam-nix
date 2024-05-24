@@ -75,7 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/varnamproject/varnam-fcitx5";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ adtya ];
-    mainProgram = "varnam-fcitx5";
     platforms = lib.platforms.linux;
   };
 }

@@ -2,11 +2,11 @@
 , buildGoModule
 , fetchFromGitHub
 , pkg-config
-, cli ? false
+, libgovarnam
 }:
 
 buildGoModule rec {
-  pname = "libgovarnam";
+  pname = "varnam-cli";
   version = "1.9.1";
 
   src = fetchFromGitHub {
@@ -21,46 +21,26 @@ buildGoModule rec {
 
   CGO_ENABLED = 1;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config libgovarnam ];
 
-  buildPhase =
-    let buildcli = ''go build -o varnamcli -ldflags "-s -w -X 'github.com/varnamproject/govarnam/govarnam.BuildString=${version} (\#0000000 1970-01-01T00:00:00+0000)' -X 'github.com/varnamproject/govarnam/govarnam.VersionString=${version}'" ./cli'';
-    in ''
-      runHook preInstall
 
-      go build -tags "fts5" -buildmode=c-shared -ldflags "-s -w -X 'github.com/varnamproject/govarnam/govarnam.BuildString=${version} (\#0000000 1970-01-01T00:00:00+0000)' -X 'github.com/varnamproject/govarnam/govarnam.VersionString=${version}' -extldflags "-Wl,-soname,${pname}.so.1,--version-script,${src}/govarnam.syms"" -o ${pname}.so .
-      ${lib.optionalString cli "${buildcli}"}
+  ldflags = [
+    "-w"
+    "-s"
+    "-X 'github.com/varnamproject/govarnam/govarnam.BuildString=${version} (\#0000000 1970-01-01T00:00:00+0000)'"
+    "-X 'github.com/varnamproject/govarnam/govarnam.VersionString=${version}'"
+  ];
 
-      runHook postInstall
-    '';
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/lib
-    cp ${pname}.so $out/lib/${pname}.so.${version}
-    ln -s $out/lib/${pname}.so.${version} $out/lib/${pname}.so
-    ln -s $out/lib/${pname}.so.${version} $out/lib/${pname}.so.1
-
-    mkdir -p $out/lib/pkgconfig
-    cp govarnam.pc.in $out/lib/pkgconfig/govarnam.pc
-    sed -i "s#@INSTALL_PREFIX@#$out/lib#g" $out/lib/pkgconfig/govarnam.pc
-
-    mkdir -p $out/include/${pname}
-    cp *.h $out/include/${pname}/
-
-    ${lib.optionalString cli "install -Dt $out/bin varnamcli"}
-
-    runHook postInstall
-  '';
-
+  subPackages = [
+    "cli"
+  ];
 
   meta = {
     description = "Easily type Indic languages on computer and mobile. GoVarnam is a cross-platform transliteration library. Manglish -> Malayalam, Thanglish -> Tamil, Hinglish -> Hindi plus another 10 languages. GoVarnam is a near-Go port of libvarnam";
     homepage = "https://github.com/varnamproject/govarnam";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ adtya ];
-    pkgConfigModules = [ "libgovarnam" ];
 
   };
 }
