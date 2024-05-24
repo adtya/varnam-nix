@@ -15,6 +15,16 @@
       in
       {
         formatter = pkgs.nixpkgs-fmt;
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            go_1_22
+            gnumake
+            meson
+            ninja
+            cmake
+            pkg-config
+          ];
+        };
         packages = rec {
         };
       }
