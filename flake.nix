@@ -14,8 +14,8 @@
         };
 
         packages = rec {
-          libgovarnam = pkgs.callPackage ./govarnam/libgovarnam.nix { selected_schemes = [ "ml" ]; };
-          varnam-cli = pkgs.callPackage ./govarnam { inherit libgovarnam; };
+          libgovarnam = pkgs.callPackage ./govarnam/libgovarnam.nix { };
+          varnam-cli = pkgs.callPackage ./govarnam { inherit libgovarnam; selected_schemes = [ "ml" ]; };
           fcitx5-varnam = pkgs.callPackage ./varnam-fcitx5 { inherit libgovarnam; };
         };
       in
@@ -24,11 +24,15 @@
         devShells.default = pkgs.mkShell {
           packages = (with pkgs; [
             go_1_22
+            gopls
             gnumake
             meson
             ninja
             cmake
             pkg-config
+            ruby
+            rubyPackages.ffi
+            python3
           ]) ++ (with packages; [ libgovarnam varnam-cli ]);
         };
         packages = {

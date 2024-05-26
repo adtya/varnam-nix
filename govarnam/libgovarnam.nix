@@ -1,30 +1,8 @@
 { lib
-, fetchzip
 , buildGoModule
 , fetchFromGitHub
-, selected_schemes ? [ ]
 }:
 
-let
-  schemeShas = import ./schemes.nix;
-  knownSchemes = builtins.attrNames schemeShas;
-  selectedSchemes =
-    if (selected_schemes == [ ])
-    then knownSchemes
-    else
-      let
-        unknown = lib.subtractLists knownSchemes selected_schemes;
-      in
-      if (unknown != [ ])
-      then throw "Unknown scheme(s): ${lib.concatStringsSep " " unknown}"
-      else selected_schemes;
-  schemeSrcs = lib.lists.forEach selectedSchemes (
-    name: (fetchzip {
-      url = schemeShas.${name}.url;
-      sha256 = schemeShas.${name}.sha;
-    })
-  );
-in
 buildGoModule rec {
   pname = "libgovarnam";
   version = "1.9.1";
@@ -68,10 +46,6 @@ buildGoModule rec {
 
     mkdir -p $out/include/${pname}
     cp *.h $out/include/${pname}/
-
-    mkdir -p $out/share/varnam/schemes
-    echo ${toString (lib.lists.forEach schemeSrcs (scheme: "${scheme}/*.vst"))}
-    cp ${toString (lib.lists.forEach schemeSrcs (scheme: "${scheme}/*.vst"))} $out/share/varnam/schemes/
 
     runHook postInstall
   '';
