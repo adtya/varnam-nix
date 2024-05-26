@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-vsDKPA24CR9lfjBNPL+XIifPS3j0eUEspTamt/QqalE=";
   };
 
-  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -63,8 +62,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  mesonBuildType = "native";
 
   meta = {
     description = "Fcitx5 wrapper for Varnam Input Method Engine";
