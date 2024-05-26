@@ -39,6 +39,9 @@
           inherit (packages) libgovarnam varnam-cli fcitx5-varnam;
           default = packages.varnam-cli;
         };
+        overlays.default = final: prev: {
+          inherit (packages) libgovarnam varnam-cli fcitx5-varnam;
+        };
       }
     );
 }
