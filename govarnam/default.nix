@@ -37,7 +37,7 @@ buildGoModule rec {
 
   CGO_ENABLED = 1;
 
-  nativeBuildInputs = [ pkg-config libgovarnam makeWrapper];
+  nativeBuildInputs = [ pkg-config libgovarnam makeWrapper ];
   buildInputs = [ pkg-config libgovarnam ];
 
   ldflags = [

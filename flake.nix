@@ -1,6 +1,15 @@
 {
   description = "Varnam on Nix";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://varnam-nix.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "varnam-nix.cachix.org-1:IduaZzaMOJmY32L11e+a4fDDq6Xnq9/NcocAPcIbX9Y="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
