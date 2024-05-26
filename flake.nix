@@ -12,45 +12,42 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
+  outputs = { nixpkgs, ... }:
+    let
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+      };
 
-        packages = rec {
-          libgovarnam = pkgs.callPackage ./govarnam/libgovarnam.nix { };
-          varnam-cli = pkgs.callPackage ./govarnam { inherit libgovarnam; };
-          fcitx5-varnam = pkgs.callPackage ./varnam-fcitx5 { inherit libgovarnam; };
-        };
-      in
-      {
-        formatter = pkgs.nixpkgs-fmt;
-        devShells.default = pkgs.mkShell {
-          packages = (with pkgs; [
-            go_1_22
-            gopls
-            gnumake
-            meson
-            ninja
-            cmake
-            pkg-config
-            ruby
-            rubyPackages.ffi
-            python3
-          ]) ++ (with packages; [ libgovarnam varnam-cli ]);
-        };
-        packages = {
-          inherit (packages) libgovarnam varnam-cli fcitx5-varnam;
-          default = packages.varnam-cli;
-        };
-        overlays.default = final: prev: {
-          inherit (packages) libgovarnam varnam-cli fcitx5-varnam;
-        };
-      }
-    );
+      packages = pkgs: rec {
+        libgovarnam = pkgs.callPackage ./govarnam/libgovarnam.nix { };
+        varnam-cli = pkgs.callPackage ./govarnam { inherit libgovarnam; };
+        fcitx5-varnam = pkgs.callPackage ./varnam-fcitx5 { inherit libgovarnam; };
+      };
+    in
+    {
+      formatter.x86_64-linux = pkgs.nixpkgs-fmt;
+      devShells.x86_64-linux.default = pkgs.mkShell {
+        packages = (with pkgs; [
+          go_1_22
+          gopls
+          gnumake
+          meson
+          ninja
+          cmake
+          pkg-config
+          ruby
+          rubyPackages.ffi
+          python3
+        ]) ++ (with (packages pkgs); [ libgovarnam varnam-cli ]);
+      };
+      packages.x86_64-linux = rec {
+        inherit (packages pkgs) libgovarnam varnam-cli fcitx5-varnam;
+        default = varnam-cli;
+      };
+      overlays.default = final: prev: {
+        inherit (packages prev) libgovarnam varnam-cli fcitx5-varnam;
+      };
+    };
 }
