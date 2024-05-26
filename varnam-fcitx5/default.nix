@@ -16,13 +16,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "varnamproject";
     repo = "varnam-fcitx5";
-    rev = "e6366e4755e21dd3a162f38f21df4e5c37c64ae2";
-    hash = "sha256-E9mdA6j9VFSMQwkrfGLcHUFrF0w7zWjgt+2h4MEqkPQ=";
+    rev = "de41a96c494673ccb3465ad4c31930b9643c7fca";
+    hash = "sha256-vsDKPA24CR9lfjBNPL+XIifPS3j0eUEspTamt/QqalE=";
   };
-
-  patches = [
-    ./remove_old_meson_options_file.patch
-  ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
